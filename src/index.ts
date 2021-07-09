@@ -12,7 +12,9 @@ discordClient.on("ready", () => {
 discordClient.on("message", async (msg) => {
   switch (msg.content) {
     case "!leaderboard":
-    case "!leaderboards": {
+    case "!leaderboards":
+    case "!lb":
+    case "!ls": {
       const res = await apolloClient.query({
         query: GET_USERS,
       });
@@ -20,7 +22,8 @@ discordClient.on("message", async (msg) => {
       msg.reply(leaderboard.toString());
       break;
     }
-    case "!increment": {
+    case "!increment":
+    case "!inc": {
       const user = msg.author;
       const res = await apolloClient.mutate({
         mutation: INCREMENT_COUNT,
