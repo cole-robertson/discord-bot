@@ -1,7 +1,7 @@
 import discordClient from "./discordClient";
 import apolloClient from "./apolloClient";
 import { LeaderBoard } from "./Leaderboard";
-import { GET_USERS, INCREMENT_COUNT } from "./graphql";
+import { ADD_USER, GET_USERS, INCREMENT_COUNT } from "./graphql";
 
 discordClient.login(process.env.BOT_TOKEN);
 
@@ -16,19 +16,28 @@ discordClient.on("message", async (msg) => {
       const res = await apolloClient.query({
         query: GET_USERS,
       });
-      console.log(res);
-      console.log(res.data);
       const leaderboard = new LeaderBoard({ users: res.data.user });
       msg.reply(leaderboard.toString());
       break;
     }
     case "!increment": {
       const user = msg.author;
-      await apolloClient.mutate({
+      const res = await apolloClient.mutate({
         mutation: INCREMENT_COUNT,
         variables: { discord_id: user.id.toString() },
       });
-      console.log(user);
+
+      // User does not exist in the db, so add them
+      if (res.data.update_user?.affected_rows === 0) {
+        await apolloClient.mutate({
+          mutation: ADD_USER,
+          variables: {
+            discord_id: user.id.toString(),
+            name: user.username,
+            count: 1,
+          },
+        });
+      }
       break;
     }
     // do nothing
