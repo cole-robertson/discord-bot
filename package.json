@@ -1,6 +1,6 @@
 {
   "name": "discord-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "https://github.com/cole-robertson/discord-bot.git",
   "author": "Cole <colerobertson44@gmail.com>",
@@ -9,6 +9,7 @@
     "@apollo/client": "^3.3.21",
     "cross-fetch": "^3.1.4",
     "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
     "graphql": "^15.5.1"
   },
   "devDependencies": {
